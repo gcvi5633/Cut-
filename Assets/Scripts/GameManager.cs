@@ -30,7 +30,6 @@ public class GameManager : MonoBehaviour
     public void InitializeGame()
     {
         _scoreText.text = _score.ToString("N0");
-        _life = _originLife;
         _lifeText.text = _life.ToString("N0");
         _gameInit.Invoke();
     }
@@ -54,7 +53,6 @@ public class GameManager : MonoBehaviour
         if (_life <= 0)
         {
             _life = 0;
-            return;
         }
         _lifeText.text = _life.ToString("N0");
         _minusLife.Invoke();
@@ -63,7 +61,7 @@ public class GameManager : MonoBehaviour
     /// <summary>
     /// 遊戲結束
     /// </summary>
-    public void EndGame()
+    void EndGame()
     {
         _endGame.Invoke();
     }
@@ -74,5 +72,11 @@ public class GameManager : MonoBehaviour
         {
             EndGame();
         }
+    }
+
+    public void ResetParameter()
+    {
+        _score = 0;
+        _life = _originLife;
     }
 }

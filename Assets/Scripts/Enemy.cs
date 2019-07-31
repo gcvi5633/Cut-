@@ -1,28 +1,30 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.EventSystems;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour,IPointerEnterHandler
 {
     [SerializeField]
-    float _standSpeed = 0;
-    [SerializeField]
-    float _fallDownSpeed = 0;
-    [SerializeField]
-    float _acttackWait = 0;
+    float _attackWait = 0;
     [SerializeField]
     UnityEvent _attacked = null;
     [SerializeField]
     UnityEvent _beKilled = null;
-    
-    Collider2D _collider2D = null;
+
+    bool _isStand = false;
+
+    public bool IsStand
+    {
+        get { return _isStand; }
+        set { _isStand = value; }
+    }
+
     Animator _animator = null;
     Coroutine _coroutine = null;
 
     void Awake()
     {
-        _collider2D = GetComponent<Collider2D>();
         _animator = GetComponent<Animator>();
     }
 
@@ -34,6 +36,7 @@ public class Enemy : MonoBehaviour
 
     public void Stand()
     {
+        _isStand = true;
         _coroutine = StartCoroutine(_Attack());
     }
 
@@ -41,7 +44,7 @@ public class Enemy : MonoBehaviour
     {
         while (true)
         {
-            yield return new WaitForSeconds(_acttackWait);
+            yield return new WaitForSeconds(_attackWait);
             _attacked.Invoke();
         }
     }
@@ -52,5 +55,14 @@ public class Enemy : MonoBehaviour
         StopCoroutine(_coroutine);
         _animator.SetTrigger("Down");
         _beKilled.Invoke();
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (_isStand)
+        {
+            _isStand = false;
+            BeAttacked();
+        }
     }
 }
