@@ -13,17 +13,23 @@ public class EnemyManager : MonoBehaviour
     
     public void StartEnemyStand()
     {
+        Debug.Log("StartEnemyStand");
         _coroutine = StartCoroutine(_EnemyStand());
     }
 
     IEnumerator _EnemyStand()
     {
         yield return new WaitForSeconds(_startWait);
-        while(_enemies.Any(i=>i.IsStand == false))
+        Debug.Log("_EnemyStand");
+        while(true)
         {
-            var enemy = _enemies.Where(i => i.IsStand == false).FirstOrDefault(i=>i);
-            enemy.Stand();
-            yield return new WaitForSeconds(_standWait);
+            if (_enemies.Any(i=>i.IsStand == false))
+            {
+                var enemy = _enemies.Where(i => i.IsStand == false).FirstOrDefault(i=>i);
+                enemy.EnemyStand();
+                yield return new WaitForSeconds(_standWait); 
+            }
+            yield return null;
         }
     }
 
@@ -31,6 +37,11 @@ public class EnemyManager : MonoBehaviour
     {
         if (_coroutine != null)
         {
+            Debug.Log("EnemyAllStop");
+            for (int i = 0; i < _enemies.Length; i++)
+            {
+                _enemies[i].IsStand = false;
+            }
             StopCoroutine(_coroutine);
         }
     }

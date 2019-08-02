@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
-public class Enemy : MonoBehaviour,IPointerEnterHandler
+public class Enemy : MonoBehaviour,IPointerEnterHandler,IPointerUpHandler
 {
     [SerializeField]
     float _attackWait = 0;
@@ -31,11 +31,13 @@ public class Enemy : MonoBehaviour,IPointerEnterHandler
     [ContextMenu("Test Stand")]
     public void EnemyStand()
     {
+        Debug.Log("EnemyStand");
         _animator.SetTrigger("Up");
     }
 
-    public void Stand()
+    public void Attack()
     {
+        Debug.Log("Attack " + gameObject.name);
         _isStand = true;
         _coroutine = StartCoroutine(_Attack());
     }
@@ -52,12 +54,22 @@ public class Enemy : MonoBehaviour,IPointerEnterHandler
     [ContextMenu("Test fall down")]
     void BeAttacked()
     {
+        Debug.Log("BeAttacked");
         StopCoroutine(_coroutine);
         _animator.SetTrigger("Down");
         _beKilled.Invoke();
     }
 
     public void OnPointerEnter(PointerEventData eventData)
+    {
+        if (_isStand)
+        {
+            _isStand = false;
+            BeAttacked();
+        }
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
     {
         if (_isStand)
         {

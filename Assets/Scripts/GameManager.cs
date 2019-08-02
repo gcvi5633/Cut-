@@ -29,6 +29,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void InitializeGame()
     {
+        Debug.Log("InitializeGame");
         _scoreText.text = _score.ToString("N0");
         _lifeText.text = _life.ToString("N0");
         _gameInit.Invoke();
@@ -39,6 +40,7 @@ public class GameManager : MonoBehaviour
     /// <param name="score">傳入的分數</param>
     public void AddScore(int score)
     {
+        Debug.Log("AddScore");
         _score += score;
         _scoreText.text = _score.ToString("N0");
         _addScore.Invoke();
@@ -49,6 +51,7 @@ public class GameManager : MonoBehaviour
     /// </summary>
     public void MinusLife()
     {
+        Debug.Log("MinusLife");
         _life--;
         if (_life <= 0)
         {
@@ -63,11 +66,13 @@ public class GameManager : MonoBehaviour
     /// </summary>
     void EndGame()
     {
+        Debug.Log("EndGame");
         _endGame.Invoke();
     }
 
     public void CheckLife()
     {
+        Debug.Log("CheckLife");
         if (_life <= 0)
         {
             EndGame();
