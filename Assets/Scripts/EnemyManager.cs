@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -25,7 +26,7 @@ public class EnemyManager : MonoBehaviour
         {
             if (_enemies.Any(i=>i.IsStand == false))
             {
-                var enemy = _enemies.Where(i => i.IsStand == false).FirstOrDefault(i=>i);
+                var enemy = _enemies.Where(i => i.IsStand == false).OrderBy(qu => Guid.NewGuid()).FirstOrDefault(i=>i);
                 enemy.EnemyStand();
                 yield return new WaitForSeconds(_standWait); 
             }
